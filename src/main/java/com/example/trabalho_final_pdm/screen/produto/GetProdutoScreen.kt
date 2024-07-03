@@ -1,21 +1,44 @@
 package com.example.trab_final_pdm.screen.cliente
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.trab_final_pdm.data_classes.Produto
 import com.example.trab_final_pdm.view_models.SharedViewModelCliente
+import com.example.trabalho_final_pdm.view_models.SharedViewModelProduto
 
 @Composable
 fun GetProdutoScreen(
     navController: NavController,
-    sharedViewModel: SharedViewModelCliente
+    sharedViewModel: SharedViewModelProduto
 ) {
 
+    var produtoID: String by remember { mutableStateOf("") }
     var tipoGrao: String by remember { mutableStateOf("") }
     var pontoTorra: String by remember { mutableStateOf("") }
     var valor: String by remember { mutableStateOf("") }
@@ -24,7 +47,6 @@ fun GetProdutoScreen(
 
     val context = LocalContext.current
 
-    /*
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -58,12 +80,12 @@ fun GetProdutoScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(0.7f),
-                value = tipoGrao,
+                value = produtoID,
                 onValueChange = {
-                    tipoGrao = it
+                    produtoID = it
                 },
                 label = {
-                    Text(text = "Tipo Grão")
+                    Text(text = "ID do Produto")
                 }
             )
 
@@ -73,13 +95,13 @@ fun GetProdutoScreen(
                     .width(120.dp),
                 onClick = {
                     sharedViewModel.retrieveData(
-                        cpf = cpf,
+                        produtoID = produtoID,
                         context = context
                     ) { data ->
-                        nome = data.nome
-                        telefone = data.telefone
-                        endereco = data.endereco
-                        instagram = data.instagram
+                        tipoGrao = data.tipoGrao
+                        pontoTorra = data.pontoTorra
+                        valor = data.valor.toString()
+                        blend = data.blend
                     }
                 }
             ) {
@@ -91,47 +113,51 @@ fun GetProdutoScreen(
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = nome,
+            value = tipoGrao,
             onValueChange = {
-                nome = it
+                tipoGrao = it
             },
             label = {
-                Text(text = "Nome")
+                Text(text = "Tipo do grao")
             }
         )
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = telefone,
+            value = pontoTorra,
             onValueChange = {
-                telefone = it
+                pontoTorra = it
+            },
+            label = {
+                Text(text = "Ponto da torra")
+            }
+        )
+
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = valor,
+            onValueChange = {
+                valor = it
+                if(valor.isNotEmpty()) {
+                    valorDouble = valor.toDouble()
+                }
             },
             label = {
                 Text(text = "Telefone")
             }
         )
 
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = endereco,
-            onValueChange = {
-                endereco = it
-            },
-            label = {
-                Text(text = "Endereço")
-            },
-        )
-
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = instagram,
-            onValueChange = {
-                instagram = it
-            },
-            label = {
-                Text(text = "Instagram")
-            },
-        )
+        Row(
+            modifier = Modifier.padding(top = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Text(text = "Blend")
+            Switch(
+                checked = blend,
+                onCheckedChange = { blend = it }
+            )
+        }
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -144,15 +170,14 @@ fun GetProdutoScreen(
                     .fillMaxWidth()
                     .weight(0.5f),
                 onClick = {
-                    val cliente = Cliente(
-                        cpf = cpf,
-                        nome = nome,
-                        telefone = telefone,
-                        endereco = endereco,
-                        instagram = instagram
+                    val produto = Produto(
+                        tipoGrao = tipoGrao,
+                        pontoTorra = pontoTorra,
+                        valor = valorDouble,
+                        blend = blend
                     )
 
-                    sharedViewModel.saveData(cliente = cliente, context = context)
+                    sharedViewModel.saveData(produto = produto, context = context)
                 }) {
                 Text(text = "Salvar")
             }
@@ -168,7 +193,7 @@ fun GetProdutoScreen(
                 ),
                 onClick = {
                     sharedViewModel.deleteData(
-                        cpf = cpf,
+                        produtoID = produtoID,
                         context = context,
                         navController = navController
                     )
@@ -176,5 +201,5 @@ fun GetProdutoScreen(
                 Text(text = "Delete")
             }
         }
-    }*/
+    }
 }

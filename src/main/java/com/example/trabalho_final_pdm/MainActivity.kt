@@ -15,12 +15,14 @@ import com.example.trabalho_final_pdm.nav.NavGraph
 import com.example.trab_final_pdm.view_models.SharedViewModelCliente
 import com.example.trabalho_final_pdm.view_models.SharedViewModelProduto
 import com.example.trabalho_final_pdm.ui.theme.TrabalhofinalpdmTheme
+import com.example.trabalho_final_pdm.view_models.SharedViewModelPedido
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var navController: NavHostController
     private val sharedViewModelCliente: SharedViewModelCliente by viewModels()
     private val sharedViewModelProduto: SharedViewModelProduto by viewModels()
+    private val sharedViewModelPedido: SharedViewModelPedido by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +37,8 @@ class MainActivity : ComponentActivity() {
                     NavGraph(
                         navController = navController,
                         sharedViewModelCliente = sharedViewModelCliente,
-                        sharedViewModelProduto = sharedViewModelProduto
+                        sharedViewModelProduto = sharedViewModelProduto,
+                        sharedViewModelPedido = sharedViewModelPedido
                     )
                 }
             }

@@ -9,4 +9,6 @@ sealed class Screens(val route: String) {
     object MainScreenProduto : Screens(route = "main_screen_produto")
     object AddProdutoScreen : Screens(route = "add_produto_screen")
     object EditProdutoScreen : Screens(route = "edit_produto_screen")
+    object GetProdutoScreen : Screens(route = "get_produto_screen")
+    object MainScreenPedido : Screens(route = "main_screen_pedido")
 }

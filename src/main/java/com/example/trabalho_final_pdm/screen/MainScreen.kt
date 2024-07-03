@@ -46,7 +46,7 @@ fun MainScreen(
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                navController.navigate("Screens.GetDataScreen.route")
+                navController.navigate(Screens.MainScreenPedido.route)
             }
         ) {
             Text(text = "Pedido")

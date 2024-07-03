@@ -40,11 +40,12 @@ fun EditProdutoScreen(
 ) {
     val produto by sharedViewModel.selectedProduto.observeAsState()
 
-    var tipoGrao: String by remember { mutableStateOf("") }
-    var pontoTorra: String by remember { mutableStateOf("") }
-    var valor: String by remember { mutableStateOf("") }
+    var produtoID: String by remember { mutableStateOf(produto?.produtoID ?: "") }
+    var tipoGrao: String by remember { mutableStateOf(produto?.tipoGrao ?: "") }
+    var pontoTorra: String by remember { mutableStateOf(produto?.pontoTorra ?: "") }
+    var valor: String by remember { mutableStateOf( produto?.valor.toString() ?: "") }
     var valorDouble: Double by remember { mutableDoubleStateOf(0.0) }
-    var blend: Boolean by remember { mutableStateOf(false) }
+    var blend: Boolean by remember { mutableStateOf(produto?.blend ?: false) }
 
     val context = LocalContext.current
 
@@ -72,6 +73,17 @@ fun EditProdutoScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = produtoID,
+            onValueChange = {
+                produtoID = it
+            },
+            label = {
+                Text(text = "ID do Produto")
+            }
+        )
+
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = tipoGrao,
@@ -111,7 +123,8 @@ fun EditProdutoScreen(
 
         Row(
             modifier = Modifier.padding(top = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(text = "Blend")
             Switch(

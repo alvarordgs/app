@@ -1,4 +1,4 @@
-package com.example.trabalho_final_pdm.screen.produto
+package com.example.trabalho_final_pdm.screen.pedido
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,36 +27,37 @@ import com.example.trabalho_final_pdm.nav.Screens
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
 import com.example.trab_final_pdm.data_classes.Produto
+import com.example.trabalho_final_pdm.view_models.SharedViewModelPedido
 import com.example.trabalho_final_pdm.view_models.SharedViewModelProduto
 import kotlinx.coroutines.launch
 
 @Composable
-fun MainScreenProduto(
+fun MainScreenPedido(
     navController: NavController,
-    sharedViewModel: SharedViewModelProduto
+    sharedViewModel: SharedViewModelPedido
 ) {
-    val context = LocalContext.current
-    val produtos by sharedViewModel.produtos.observeAsState(initial = emptyList())
-    val scope = rememberCoroutineScope()
-
-    LaunchedEffect(key1 = Unit) {
-        scope.launch {
-            sharedViewModel.fetchProdutos(context)
-        }
-    }
-
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        TopBarProduto(navController = navController)
-        ActionButtonsProduto(navController = navController, modifier = Modifier.weight(1f))
-        ProdutoList(
-            produtos = produtos,
-            navController = navController,
-            sharedViewModel = sharedViewModel,
-            modifier = Modifier.weight(9f)
-        )
-    }
+//    val context = LocalContext.current
+//    val produtos by sharedViewModel.produtos.observeAsState(initial = emptyList())
+//    val scope = rememberCoroutineScope()
+//
+//    LaunchedEffect(key1 = Unit) {
+//        scope.launch {
+//            sharedViewModel.fetchProdutos(context)
+//        }
+//    }
+//
+//    Column(
+//        modifier = Modifier.fillMaxSize()
+//    ) {
+//        TopBarProduto(navController = navController)
+//        ActionButtonsProduto(navController = navController, modifier = Modifier.weight(1f))
+//        ProdutoList(
+//            produtos = produtos,
+//            navController = navController,
+//            sharedViewModel = sharedViewModel,
+//            modifier = Modifier.weight(9f)
+//        )
+//    }
 }
 
 @Composable
