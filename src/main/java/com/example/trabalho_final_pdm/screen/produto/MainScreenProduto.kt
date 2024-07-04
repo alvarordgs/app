@@ -26,7 +26,7 @@ import androidx.navigation.NavController
 import com.example.trabalho_final_pdm.nav.Screens
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
-import com.example.trab_final_pdm.data_classes.Produto
+import com.example.trabalho_final_pdm.data_classes.Produto
 import com.example.trabalho_final_pdm.view_models.SharedViewModelProduto
 import kotlinx.coroutines.launch
 

@@ -5,7 +5,7 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import com.example.trab_final_pdm.data_classes.Produto
+import com.example.trabalho_final_pdm.data_classes.Produto
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
@@ -24,13 +24,13 @@ class SharedViewModelProduto(): ViewModel() {
         context: Context
     ) = CoroutineScope(Dispatchers.IO).launch {
 
-        val produtoID = generateUniqueID()
-
-        produto.produtoID = produtoID
+        if(produto.produtoID.isEmpty()) {
+            produto.produtoID = generateUniqueID()
+        }
 
         val fireStoreRef = Firebase.firestore
             .collection("produto")
-            .document(produtoID)
+            .document(produto.produtoID)
 
         try {
             fireStoreRef.set(produto)

@@ -1,13 +1,11 @@
-package com.example.trab_final_pdm.screen.cliente
+package com.example.trabalho_final_pdm.screen.pedido
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -15,12 +13,11 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -28,29 +25,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.trabalho_final_pdm.data_classes.Produto
-import com.example.trabalho_final_pdm.view_models.SharedViewModelProduto
+import com.example.trabalho_final_pdm.data_classes.Pedido
+import com.example.trabalho_final_pdm.view_models.SharedViewModelPedido
 
 @Composable
-fun EditProdutoScreen(
+fun EditPedidoScreen(
     navController: NavController,
-    sharedViewModel: SharedViewModelProduto
+    sharedViewModel: SharedViewModelPedido
 ) {
-    val produto by sharedViewModel.selectedProduto.observeAsState()
+    val pedido by sharedViewModel.selectedPedido.observeAsState()
 
-    var produtoID: String by remember { mutableStateOf(produto?.produtoID ?: "") }
-    var tipoGrao: String by remember { mutableStateOf(produto?.tipoGrao ?: "") }
-    var pontoTorra: String by remember { mutableStateOf(produto?.pontoTorra ?: "") }
-    var valor: String by remember { mutableStateOf( produto?.valor.toString() ?: "") }
-    var valorDouble: Double by remember { mutableDoubleStateOf(0.0) }
-    var blend: Boolean by remember { mutableStateOf(produto?.blend ?: false) }
+    var pedidoID by remember { mutableStateOf(pedido?.pedidoID ?: "") }
+    var clienteCPF by remember { mutableStateOf(pedido?.clienteCPF ?: "") }
+    var produtoID by remember { mutableStateOf(pedido?.produtoID ?: "") }
+    var quantidade by remember { mutableStateOf(pedido?.quantidade.toString() ?: "") }
+    var quantidadeInt by remember { mutableIntStateOf(0) }
+    var data by remember { mutableStateOf(pedido?.data ?: "") }
 
     val context = LocalContext.current
-
-    Log.i("EditProdutoScreen", "produto: $produto")
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -77,64 +71,52 @@ fun EditProdutoScreen(
         verticalArrangement = Arrangement.Center
     ) {
         OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth(),
+            value = pedidoID,
+            onValueChange = {
+                pedidoID = it
+            },
+            label = {
+                Text(text = "ID do pedido")
+            }
+        )
+
+        OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = produtoID,
             onValueChange = {
                 produtoID = it
             },
             label = {
-                Text(text = "ID do Produto")
+                Text(text = "ID do produto")
             }
         )
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = tipoGrao,
+            value = quantidade,
             onValueChange = {
-                tipoGrao = it
-            },
-            label = {
-                Text(text = "Tipo Grão")
-            }
-        )
-
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = pontoTorra,
-            onValueChange = {
-                pontoTorra = it
-            },
-            label = {
-                Text(text = "Ponto da Torra")
-            }
-        )
-
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = valor,
-            onValueChange = {
-                valor = it
-                if(valor.isNotEmpty()) {
-                    valorDouble = valor.toDouble()
+                quantidade = it
+                if (it.isNotEmpty()) {
+                    quantidadeInt = it.toInt()
                 }
             },
             label = {
-                Text(text = "Valor")
-            },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+                Text(text = "Quantidade")
+            }
         )
 
-        Row(
-            modifier = Modifier.padding(top = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Text(text = "Blend")
-            Switch(
-                checked = blend,
-                onCheckedChange = { blend = it }
-            )
-        }
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = data,
+            onValueChange = {
+                data = it
+            },
+            label = {
+                Text(text = "Data do pedido")
+            },
+        )
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -147,15 +129,15 @@ fun EditProdutoScreen(
                     .fillMaxWidth()
                     .weight(0.5f),
                 onClick = {
-                    val produto = Produto(
+                    val pedido = Pedido(
+                        pedidoID = pedidoID,
+                        clienteCPF = clienteCPF,
                         produtoID = produtoID,
-                        tipoGrao = tipoGrao,
-                        pontoTorra = pontoTorra,
-                        valor = valorDouble,
-                        blend = blend,
+                        quantidade = quantidadeInt,
+                        data = data
                     )
 
-                    sharedViewModel.saveData(produto = produto, context = context)
+                    sharedViewModel.saveData(pedido = pedido, context = context)
                 }) {
                 Text(text = "Salvar")
             }
@@ -171,7 +153,7 @@ fun EditProdutoScreen(
                 ),
                 onClick = {
                     sharedViewModel.deleteData(
-                        produtoID = produto!!.produtoID,
+                        pedidoID = pedidoID,
                         context = context,
                         navController = navController
                     )

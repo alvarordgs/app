@@ -14,6 +14,9 @@ import com.example.trabalho_final_pdm.screen.cliente.GetClienteScreen
 import com.example.trabalho_final_pdm.screen.cliente.MainScreenCliente
 import com.example.trabalho_final_pdm.screen.produto.MainScreenProduto
 import com.example.trab_final_pdm.view_models.SharedViewModelCliente
+import com.example.trabalho_final_pdm.screen.pedido.AddPedidoScreen
+import com.example.trabalho_final_pdm.screen.pedido.EditPedidoScreen
+import com.example.trabalho_final_pdm.screen.pedido.GetPedidoScreen
 import com.example.trabalho_final_pdm.screen.pedido.MainScreenPedido
 import com.example.trabalho_final_pdm.view_models.SharedViewModelPedido
 import com.example.trabalho_final_pdm.view_models.SharedViewModelProduto
@@ -91,6 +94,28 @@ fun NavGraph(
 
         composable(route = Screens.MainScreenPedido.route) {
             MainScreenPedido(
+                navController = navController,
+                sharedViewModel = sharedViewModelPedido,
+                sharedViewModelProduto = sharedViewModelProduto
+            )
+        }
+
+        composable(route = Screens.AddPedidoScreen.route) {
+            AddPedidoScreen(
+                navController = navController,
+                sharedViewModel = sharedViewModelPedido
+            )
+        }
+
+        composable(route = Screens.GetPedidoScreen.route) {
+            GetPedidoScreen(
+                navController = navController,
+                sharedViewModel = sharedViewModelPedido
+            )
+        }
+
+        composable(route = Screens.EditPedidoScreen.route) {
+            EditPedidoScreen(
                 navController = navController,
                 sharedViewModel = sharedViewModelPedido
             )

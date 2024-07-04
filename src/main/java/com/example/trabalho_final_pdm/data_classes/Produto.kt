@@ -1,4 +1,4 @@
-package com.example.trab_final_pdm.data_classes
+package com.example.trabalho_final_pdm.data_classes
 
 data class Produto(
     var produtoID: String = "",

@@ -28,8 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.trab_final_pdm.data_classes.Produto
-import com.example.trab_final_pdm.view_models.SharedViewModelCliente
+import com.example.trabalho_final_pdm.data_classes.Produto
 import com.example.trabalho_final_pdm.view_models.SharedViewModelProduto
 
 @Composable

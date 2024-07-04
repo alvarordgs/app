@@ -1,4 +1,4 @@
-package com.example.trabalho_final_pdm.screen.produto
+package com.example.trabalho_final_pdm.screen.pedido
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,11 +13,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -27,19 +27,20 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.trabalho_final_pdm.data_classes.Produto
-import com.example.trabalho_final_pdm.view_models.SharedViewModelProduto
+import com.example.trabalho_final_pdm.data_classes.Pedido
+import com.example.trabalho_final_pdm.view_models.SharedViewModelPedido
 
 @Composable
-fun AddProdutoScreen(
+fun AddPedidoScreen(
     navController: NavController,
-    sharedViewModel: SharedViewModelProduto
+    sharedViewModel: SharedViewModelPedido
 ) {
-    var tipoGrao: String by remember { mutableStateOf("") }
-    var pontoTorra: String by remember { mutableStateOf("") }
-    var valor: String by remember { mutableStateOf("") }
-    var valorDouble: Double by remember { mutableDoubleStateOf(0.0) }
-    var blend: Boolean by remember { mutableStateOf(false) }
+
+    var clienteCPF: String by remember { mutableStateOf("") }
+    var produtoID: String by remember { mutableStateOf("") }
+    var quantidade: String by remember { mutableStateOf("") }
+    var quantidadeInt: Int by remember { mutableIntStateOf(0) }
+    var data: String by remember { mutableStateOf("") }
 
     val context = LocalContext.current
 
@@ -67,70 +68,69 @@ fun AddProdutoScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = tipoGrao,
+            value = clienteCPF,
             onValueChange = {
-                tipoGrao = it
+                clienteCPF = it
             },
             label = {
-                Text(text = "Tipo Grão")
+                Text(text = "CPF do cliente")
             }
         )
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = pontoTorra,
+            value = produtoID,
             onValueChange = {
-                pontoTorra = it
+                produtoID = it
             },
             label = {
-                Text(text = "Ponto da Torra")
+                Text(text = "ID do produto")
             }
         )
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = valor,
+            value = quantidade,
             onValueChange = {
-                valor = it
-                if(valor.isNotEmpty()) {
-                    valorDouble = valor.toDouble()
+                quantidade = it
+                if(quantidade.isNotEmpty()) {
+                    quantidadeInt = quantidade.toInt()
                 }
             },
             label = {
-                Text(text = "Valor")
+                Text(text = "Quantidade")
             },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
 
-        Row(
-            modifier = Modifier.padding(top = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(text = "Blend")
-            Switch(
-                checked = blend,
-                onCheckedChange = { blend = it }
-            )
-        }
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = data,
+            onValueChange = {
+                data = it
+            },
+            label = {
+                Text(text = "Data")
+            },
+        )
 
         Button(
             modifier = Modifier
                 .padding(top = 50.dp)
                 .fillMaxWidth(),
             onClick = {
-                val produto = Produto(
-                    tipoGrao = tipoGrao,
-                    pontoTorra = pontoTorra,
-                    valor = valorDouble,
-                    blend = blend,
+                val pedido = Pedido(
+                    clienteCPF = clienteCPF,
+                    produtoID = produtoID,
+                    quantidade = quantidadeInt,
+                    data = data
                 )
 
-                sharedViewModel.saveData(produto = produto, context = context)
+                sharedViewModel.saveData(pedido = pedido, context = context)
             }) {
-            Text(text = "Salvar")
+            Text(text = "Save")
         }
     }
 }

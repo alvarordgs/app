@@ -1,5 +1,7 @@
 package com.example.trabalho_final_pdm.screen.pedido
 
+import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,7 +28,7 @@ import androidx.navigation.NavController
 import com.example.trabalho_final_pdm.nav.Screens
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
-import com.example.trab_final_pdm.data_classes.Produto
+import com.example.trabalho_final_pdm.data_classes.Pedido
 import com.example.trabalho_final_pdm.view_models.SharedViewModelPedido
 import com.example.trabalho_final_pdm.view_models.SharedViewModelProduto
 import kotlinx.coroutines.launch
@@ -34,30 +36,33 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainScreenPedido(
     navController: NavController,
-    sharedViewModel: SharedViewModelPedido
+    sharedViewModel: SharedViewModelPedido,
+    sharedViewModelProduto: SharedViewModelProduto
 ) {
-//    val context = LocalContext.current
-//    val produtos by sharedViewModel.produtos.observeAsState(initial = emptyList())
-//    val scope = rememberCoroutineScope()
-//
-//    LaunchedEffect(key1 = Unit) {
-//        scope.launch {
-//            sharedViewModel.fetchProdutos(context)
-//        }
-//    }
-//
-//    Column(
-//        modifier = Modifier.fillMaxSize()
-//    ) {
-//        TopBarProduto(navController = navController)
-//        ActionButtonsProduto(navController = navController, modifier = Modifier.weight(1f))
-//        ProdutoList(
-//            produtos = produtos,
-//            navController = navController,
-//            sharedViewModel = sharedViewModel,
-//            modifier = Modifier.weight(9f)
-//        )
-//    }
+    val context = LocalContext.current
+    val pedidos by sharedViewModel.pedidos.observeAsState(initial = emptyList())
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(key1 = Unit) {
+        scope.launch {
+            sharedViewModel.fetchPedidos(context)
+        }
+    }
+
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        TopBarProduto(navController = navController)
+        ActionButtonsProduto(navController = navController, modifier = Modifier.weight(1f))
+        PedidoList(
+            pedidos = pedidos,
+            navController = navController,
+            sharedViewModel = sharedViewModel,
+            sharedViewModelProduto = sharedViewModelProduto,
+            context = context,
+            modifier = Modifier.weight(9f)
+        )
+    }
 }
 
 @Composable
@@ -89,7 +94,7 @@ fun ActionButtonsProduto(navController: NavController, modifier: Modifier) {
                 .weight(0.5f)
                 .fillMaxWidth(),
             onClick = {
-                navController.navigate(Screens.AddProdutoScreen.route)
+                navController.navigate(Screens.AddPedidoScreen.route)
             }
         ) {
             Text(text = "Adicionar")
@@ -100,7 +105,7 @@ fun ActionButtonsProduto(navController: NavController, modifier: Modifier) {
                 .weight(0.5f)
                 .fillMaxWidth(),
             onClick = {
-                navController.navigate(Screens.GetProdutoScreen.route)
+                navController.navigate(Screens.GetPedidoScreen.route)
             }
         ) {
             Text(text = "Buscar")
@@ -109,10 +114,12 @@ fun ActionButtonsProduto(navController: NavController, modifier: Modifier) {
 }
 
 @Composable
-fun ProdutoList(
-    produtos: List<Produto>,
+fun PedidoList(
+    pedidos: List<Pedido>,
     navController: NavController,
-    sharedViewModel: SharedViewModelProduto,
+    sharedViewModel: SharedViewModelPedido,
+    sharedViewModelProduto: SharedViewModelProduto,
+    context: Context,
     modifier: Modifier
 ) {
 
@@ -121,15 +128,17 @@ fun ProdutoList(
             .padding(start = 50.dp, end = 50.dp)
             .fillMaxSize()
     ) {
-        items(produtos) { produto ->
+        items(pedidos) { pedido ->
+
             Text(
-                text = produto.tipoGrao,
+                text = "ID do pedido: " + pedido.pedidoID + " - Data: " + pedido.data,
                 modifier = Modifier.clickable {
-                    sharedViewModel.selectProduto(produto)
-                    navController.navigate(Screens.EditProdutoScreen.route)
+                    sharedViewModel.selectPedido(pedido)
+                    navController.navigate(Screens.EditPedidoScreen.route)
                 },
                 color = Color.Black,
             )
         }
     }
 }
+
